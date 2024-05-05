@@ -1,3 +1,6 @@
+#!/bin/bash
+
+# Source ROS 2
 source /opt/ros/${ROS_DISTRO}/setup.bash
 source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash
 
@@ -12,3 +15,5 @@ if [ -f /overlay_ws/install/setup.bash ]
 then
     source /overlay_ws/install/setup.bash
 fi
+
+exec "$@"

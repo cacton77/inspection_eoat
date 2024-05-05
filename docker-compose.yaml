@@ -1,0 +1,35 @@
+version: "3"
+services:
+  base:
+    image: inspection_eoat:base
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      args:
+        ROS_DISTRO: humble
+      target: base
+    # Interactive shell
+    stdin_open: true
+    tty: true
+    # Networking and IPC for ROS 2
+    network_mode: host
+    ipc: host
+    # Needed to access devices and display graphical applications
+    privileged: true
+    volumes:
+      # Allows graphical programs in the container.
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - ${XAUTHORITY:-$HOME/.Xauthority}:/root/.Xauthority
+      # Allow access to host devices
+      - /dev:/dev
+    device_cgroup_rules:
+      - 'c *:* rmw'
+
+  # Overlay image containing the example source code.
+  overlay:
+    extends: base
+    image: inspection_eoat:overlay
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: overlay
