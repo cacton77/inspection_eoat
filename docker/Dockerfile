@@ -21,11 +21,31 @@ RUN wget https://raw.githubusercontent.com/gonzalo/gphoto2-updater/master/gphoto
     && chmod +x gphoto2-updater.sh \
     && ./gphoto2-updater.sh
 
+ARG DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update \
+    && apt-get install -y \
+    build-essential \
+    cmake \
+    git-all \
+    software-properties-common \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN apt-get update \
+    && apt-get install -y \
+    ros-${ROS_DISTRO}-librealsense2* \
+    ros-${ROS_DISTRO}-realsense2-* \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN apt-get update \
+    && apt-get install -y \
+    ros-${ROS_DISTRO}-rviz2 \
+    && rm -rf /var/lib/apt/lists/*
+
+ARG DEBIAN_FRONTEND=dialog
+
 # Create base Colcon workspace with external dependencies
 RUN mkdir -p /tool_ws/src
-WORKDIR /tool_ws/src
-COPY dependencies.repos .
-RUN vcs import < dependencies.repos
 
 # Build the base Colcon workspace, installing dependencies first.
 WORKDIR /tool_ws
@@ -42,8 +62,20 @@ FROM base AS overlay
 # Create an overlay Colcon workspace
 RUN mkdir -p /overlay_ws/src
 WORKDIR /overlay_ws
-COPY ./gphoto2_ros/ ./src/gphoto2_ros/
+
+COPY ./gphoto2_srvs/ ./src/gphoto2_srvs/
+
 RUN source /tool_ws/install/setup.bash \
+    && rosdep install --from-paths src --ignore-src --rosdistro ${ROS_DISTRO} -y \
+    && colcon build --symlink-install
+
+WORKDIR /overlay_ws/src
+COPY dependencies.repos .
+RUN vcs import < dependencies.repos
+
+WORKDIR /overlay_ws
+RUN source /overlay_ws/install/setup.bash \
+    && source /overlay_ws/install/setup.bash \
     && rosdep install --from-paths src --ignore-src --rosdistro ${ROS_DISTRO} -y \
     && colcon build --symlink-install
 

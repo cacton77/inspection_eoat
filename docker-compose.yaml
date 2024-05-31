@@ -33,3 +33,25 @@ services:
       context: .
       dockerfile: docker/Dockerfile
       target: overlay
+
+  # Dev container
+  dev:
+    extends: overlay
+    command: /bin/bash
+    environment:
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - /tmp/.docker.xauth:/tmp/.docker.xauth:rw
+
+  # Test container
+  test:
+    extends: overlay
+    command: ros2 run gphoto2_ros gphoto2_node
+    environment:
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - /tmp/.docker.xauth:/tmp/.docker.xauth:rw
