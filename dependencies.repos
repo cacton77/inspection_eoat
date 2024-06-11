@@ -4,4 +4,10 @@ repositories:
     gphoto2_ros:
         type: git
         url: https://github.com/macs-lab/gphoto2_ros
-        version: aaaf18e
+        version: main
+
+    # Inspection Interfaces
+    InspectionInterfaces:
+        type: git
+        url: https://github.com/macs-lab/InspectionInterfaces.git
+        version: main

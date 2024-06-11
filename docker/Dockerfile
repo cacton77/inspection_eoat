@@ -9,8 +9,11 @@ SHELL ["/bin/bash", "-c"]
 
 # Install cli tools via apt
 RUN apt-get update \
-    && apt-get install -y wget curl neovim \
+    && apt-get install -y wget curl neovim python3-pip\
     && rm -rf /var/lib/apt/lists/*
+
+# Install rpi-ws281x-python package
+RUN pip install rpi_ws281x
 
 # Remove links to old gphoto2 version
 RUN rm -rf /lib/*-linux-gnu/libgphoto2*
@@ -31,24 +34,15 @@ RUN apt-get update \
     software-properties-common \
     && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update \
-    && apt-get install -y \
-    ros-${ROS_DISTRO}-librealsense2* \
-    ros-${ROS_DISTRO}-realsense2-* \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN apt-get update \
-    && apt-get install -y \
-    ros-${ROS_DISTRO}-rviz2 \
-    && rm -rf /var/lib/apt/lists/*
-
 ARG DEBIAN_FRONTEND=dialog
 
 # Create base Colcon workspace with external dependencies
-RUN mkdir -p /tool_ws/src
+RUN mkdir -p /base_ws/src
 
 # Build the base Colcon workspace, installing dependencies first.
-WORKDIR /tool_ws
+WORKDIR /base_ws
+COPY ./gphoto2_srvs/ ./src/gphoto2_srvs/
+COPY ./rpi_ws281x_ros ./src/rpi_ws281x_ros
 RUN source /opt/ros/${ROS_DISTRO}/setup.bash \
     && apt-get update -y \
     && rosdep install --from-paths src --ignore-src --rosdistro ${ROS_DISTRO} -y \
@@ -61,21 +55,12 @@ FROM base AS overlay
 
 # Create an overlay Colcon workspace
 RUN mkdir -p /overlay_ws/src
-WORKDIR /overlay_ws
-
-COPY ./gphoto2_srvs/ ./src/gphoto2_srvs/
-
-RUN source /tool_ws/install/setup.bash \
-    && rosdep install --from-paths src --ignore-src --rosdistro ${ROS_DISTRO} -y \
-    && colcon build --symlink-install
-
 WORKDIR /overlay_ws/src
 COPY dependencies.repos .
 RUN vcs import < dependencies.repos
 
 WORKDIR /overlay_ws
-RUN source /overlay_ws/install/setup.bash \
-    && source /overlay_ws/install/setup.bash \
+RUN source /base_ws/install/setup.bash \
     && rosdep install --from-paths src --ignore-src --rosdistro ${ROS_DISTRO} -y \
     && colcon build --symlink-install
 
