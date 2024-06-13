@@ -58,7 +58,7 @@ services:
 
   leds:
     extends: overlay
-    command: ros2 run rpi_ws281x_ros pixel_strip_node 100 100 100
+    command: ros2 launch rpi_ws281x_ros pixel_strip.launch.py
     environment:
       - DISPLAY=${DISPLAY}
       - QT_X11_NO_MITSHM=1

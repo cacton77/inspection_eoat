@@ -1,29 +1,55 @@
+import sys
+import signal
 import rclpy
 from rclpy.node import Node
 
 from std_msgs.msg import ColorRGBA
 
-from rpi_ws281x import PixelStrip, Color
-import rpi_ws281x as rpi
-import argparse
+import rpi_ws281x as ws281x
 
-# LED strip configuration:
-LED_COUNT = 96        # Number of LED pixels.
-LED_PIN = 18          # GPIO pin connected to the pixels (18 uses PWM!).
-# LED_PIN = 10        # GPIO pin connected to the pixels (10 uses SPI /dev/spidev0.0).
-LED_FREQ_HZ = 800000  # LED signal frequency in hertz (usually 800khz)
-LED_DMA = 10          # DMA channel to use for generating signal (try 10)
-LED_BRIGHTNESS = 255  # Set to 0 for darkest and 255 for brightest
-LED_INVERT = False    # True to invert the signal (when using NPN transistor level shift)
-LED_CHANNEL = 0       # set to '1' for GPIOs 13, 19, 41, 45 or 53
 
-class PixelStrip(Node):
+class PixelStripNode(Node):
+
     def __init__(self):
         super().__init__('pixel_strip')
-        self.sub = self.create_subscription(ColorRGBA, 'pixel_strip', self.set_pixels_callback, 10)
+        self.sub = self.create_subscription(
+            ColorRGBA, 'pixel_strip', self.set_pixels_callback, 10)
+        self.declare_parameters(
+            namespace='',
+            parameters=[
+                ('led_count', 1),
+                ('led_pin', 18),
+                ('led_freq_hz', 800000),
+                ('led_dma', 10),
+                ('led_brightness', 255),
+                ('led_invert', False),
+                ('led_channel', 0)
+            ]
+        )
 
-        self.strip = rpi.PixelStrip(LED_COUNT, LED_PIN, LED_FREQ_HZ, LED_DMA, LED_INVERT, LED_BRIGHTNESS, LED_CHANNEL)
-        # Intialize the library (must be called once before other functions).
+        self.init_strip()
+
+        # timer_period = 0.1
+        # self.timer = self.create_timer(timer_period, self.timer_callback)
+
+    def init_strip(self):
+
+        led_count = self.get_parameter('led_count').value
+        led_pin = self.get_parameter('led_pin').value
+        led_freq_hz = self.get_parameter('led_freq_hz').value
+        led_dma = self.get_parameter('led_dma').value
+        led_invert = self.get_parameter('led_invert').value
+        led_brightness = self.get_parameter('led_brightness').value
+        led_channel = self.get_parameter('led_channel').value
+
+        self.strip = ws281x.PixelStrip(led_count,
+                                       led_pin,
+                                       led_freq_hz,
+                                       led_dma,
+                                       led_invert,
+                                       led_brightness,
+                                       led_channel)
+
         self.strip.begin()
 
     def set_pixels_callback(self, msg):
@@ -31,21 +57,40 @@ class PixelStrip(Node):
 
         r, g, b = int(msg.r), int(msg.g), int(msg.b)
 
-        for i in range(LED_COUNT):
-            self.strip.setPixelColor(i, rpi.Color(r, g, b))
+        for i in range(self.strip.numPixels()):
+            self.strip.setPixelColor(i, ws281x.Color(r, g, b))
+
+        self.strip.show()
+
+    def on_shutdown(self):
+        self.get_logger().info('Node is shutting down, turning off leds...')
+        for i in range(self.strip.numPixels()):
+            self.strip.setPixelColor(i, ws281x.Color(0, 0, 0))
 
         self.strip.show()
 
 
-
 def main():
     rclpy.init()
-    
-    pixel_strip_node = PixelStrip()
 
-    rclpy.spin(pixel_strip_node)
+    pixel_strip_node = PixelStripNode()
 
-    rclpy.shutdown()
+    def shutdown_hook(signum, frame):
+        pixel_strip_node.on_shutdown()
+        rclpy.shutdown()
+        sys.exit(0)
+
+    signal.signal(signal.SIGINT, shutdown_hook)
+    signal.signal(signal.SIGTERM, shutdown_hook)
+
+    try:
+        rclpy.spin(pixel_strip_node)
+    except KeyboardInterrupt:
+        pass
+    finally:
+        pixel_strip_node.on_shutdown()
+        rclpy.shutdown()
+
 
 if __name__ == '__main__':
     main()
