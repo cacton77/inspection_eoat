@@ -42,7 +42,6 @@ RUN mkdir -p /base_ws/src
 # Build the base Colcon workspace, installing dependencies first.
 WORKDIR /base_ws
 COPY ./gphoto2_srvs/ ./src/gphoto2_srvs/
-COPY ./rpi_ws281x_ros ./src/rpi_ws281x_ros
 RUN source /opt/ros/${ROS_DISTRO}/setup.bash \
     && apt-get update -y \
     && rosdep install --from-paths src --ignore-src --rosdistro ${ROS_DISTRO} -y \
