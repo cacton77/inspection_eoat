@@ -13,7 +13,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # Install rpi-ws281x-python package
-RUN pip install rpi_ws281x
+RUN pip install rpi_ws281x pydantic
 
 # Remove links to old gphoto2 version
 RUN rm -rf /lib/*-linux-gnu/libgphoto2*
