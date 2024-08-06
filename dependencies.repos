@@ -3,7 +3,7 @@ repositories:
     # gphoto2 ROS
     gphoto2_ros:
         type: git
-        url: https://github.com/macs-lab/gphoto2_ros
+        url: https://github.com/cacton77/gphoto2_cam
         version: main
 
     # Inspection Interfaces
