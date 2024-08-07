@@ -7,7 +7,7 @@ https://code.visualstudio.com/docs/containers/ssh
 ssh-keygen
 ```
 
-Install Docker
+[Install Docker](https://docs.docker.com/engine/install/ubuntu/#install-using-the-convenience-script)
 ```bash
 curl -fsSL https://get.docker.com -o get-docker.sh
 sudo sh ./get-docker.sh --dry-run
