@@ -12,3 +12,14 @@ Install Docker
 curl -fsSL https://get.docker.com -o get-docker.sh
 sudo sh ./get-docker.sh --dry-run
 ```
+Clone repository
+```
+git clone https://github.com/cacton77/inspection_eoat.git
+```
+
+Build Image
+```bash
+cd inspection_eoat
+docker compose build
+docker compose up xxxx
+```
