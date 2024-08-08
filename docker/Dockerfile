@@ -34,6 +34,11 @@ RUN apt-get update \
     software-properties-common \
     && rm -rf /var/lib/apt/lists/*
 
+# Use Cyclone DDS as middleware
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ros-${ROS_DISTRO}-rmw-cyclonedds-cpp
+ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+
 ARG DEBIAN_FRONTEND=dialog
 
 # Create base Colcon workspace with external dependencies

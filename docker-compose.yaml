@@ -47,7 +47,7 @@ services:
       - /tmp/.docker.xauth:/tmp/.docker.xauth:rw
 
   # Test container
-  test:
+  camera:
     extends: overlay
     command: ros2 launch gphoto2_cam camera.launch.py
     environment:
@@ -57,7 +57,7 @@ services:
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       - /tmp/.docker.xauth:/tmp/.docker.xauth:rw
 
-  leds:
+  lights:
     extends: overlay
     command: ros2 launch rpi_ws281x_ros pixel_strip.launch.py
     environment:
