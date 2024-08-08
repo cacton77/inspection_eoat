@@ -7,6 +7,10 @@ https://code.visualstudio.com/docs/containers/ssh
 ssh-keygen
 ```
 
+## EOAT Hardware Setup
+
+![](docs/hardware.drawio.png)
+
 ## Install Ubuntu Server 22.04
 
 Install Raspberry Pi Imager
