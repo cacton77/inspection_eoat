@@ -11,6 +11,15 @@ ssh-keygen
 
 ![](docs/hardware.drawio.png)
 
+Materials
+- [PoE Injector](https://www.amazon.com/TP-LINK-TL-PoE150S-Injector-Adapter-Compliant/dp/B001PS9E5I/ref=sr_1_7?crid=3SG1FRCW1W49T&dib=eyJ2IjoiMSJ9.FT_Yk-7vUIP39fYOXnsYFm66nv-sipdtsHa2XD-V1RypL-TOL1ARi2Fs67QyQiOggXMjiAuaWL8P1SCbqaTkGEzbEZ2Yd1luaCgUmVsXrxuQ6bJnNwvMiRms-soLQEd-k8maKuPFlqlZMY-8Y0Krtufef3ap_KVgY2-32ah3oBs6gLDWFJ4HY6GaVtEb5VejWdit0L_VBn6g5UkRxnMXhpHYsxkmM9qex9_ekTwnFmc.Jym5OS86b_dgeBSJ3p5Rzn8AT5QN_XHyVG0VjrUXaxU&dib_tag=se&keywords=PoE+injector&qid=1723161077&sprefix=poe+injecto%2Caps%2C164&sr=8-7)
+- [RPi PoE Hat](https://www.amazon.com/LoveRPi-Power-Over-Ethernet-Raspberry-Professional-Isolated/dp/B07XB5PR9J/ref=sr_1_1_pp?crid=1PXZZ81ABY7DJ&dib=eyJ2IjoiMSJ9.iAkCGeJwEvj8Ie_ipuLCBwVCxvi9E_qxH4MvANR6NyZyjc8NE-qnvlsa_dd_nLqadgYxbymn_7vGGP1YnjhS1QzM2LwQywK357qwAMrIdxA9Yj2RMRtxzjnZXiIBbuPH67ZhuXJU85YQwMEfNM47Beo-kaB_UqdsTkHfJaKJ_7xATjOWd_3w5NdWJ9VKneNN7UpkwoFO9pKH2JOFXqQI4ask_N9ZNOC4JuALHTdfHOI.DHyFm5AqkubkuGlRrhPdKZBhWb16btyeUXFbNNyR4kk&dib_tag=se&keywords=raspberry+pi+4b+poe+hat&qid=1723161129&sprefix=raspberry+pi+4b+poe+hat%2Caps%2C200&sr=8-1)
+- Raspberry Pi 4B Case compatible with PoE Hat
+- Cat 8 Ethernet Cable (Hub to PoE Injector)
+- Cat 8 Ethernet Cable (long enough to go from PoE Injector to robot's end effector)
+- Cat 8 Ethernet Cable (Hub to PC)
+- Short USB 2.0 to USB Mini-B Cable (RPi to Camera)
+
 ## Install Ubuntu Server 22.04
 
 Install Raspberry Pi Imager
