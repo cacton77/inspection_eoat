@@ -74,5 +74,5 @@ Build Image
 ```bash
 cd inspection_eoat
 docker compose build
-docker compose up xxxx
+docker compose up lights camera
 ```
