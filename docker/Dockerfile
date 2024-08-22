@@ -37,16 +37,16 @@ RUN apt-get update \
 # Use Cyclone DDS as middleware
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-${ROS_DISTRO}-rmw-cyclonedds-cpp
-# ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 
 ARG DEBIAN_FRONTEND=dialog
 
 # Create base Colcon workspace with external dependencies
 RUN mkdir -p /base_ws/src
+WORKDIR /base_ws/src
+COPY base_dependencies.repos .
+RUN vcs import < base_dependencies.repos
 
-# Build the base Colcon workspace, installing dependencies first.
 WORKDIR /base_ws
-COPY ./gphoto2_srvs/ ./src/gphoto2_srvs/
 RUN source /opt/ros/${ROS_DISTRO}/setup.bash \
     && apt-get update -y \
     && rosdep install --from-paths src --ignore-src --rosdistro ${ROS_DISTRO} -y \
@@ -60,13 +60,17 @@ FROM base AS overlay
 # Create an overlay Colcon workspace
 RUN mkdir -p /overlay_ws/src
 WORKDIR /overlay_ws/src
-COPY dependencies.repos .
-RUN vcs import < dependencies.repos
+COPY overlay_dependencies.repos .
+RUN vcs import < overlay_dependencies.repos
 
 WORKDIR /overlay_ws
 RUN source /base_ws/install/setup.bash \
     && rosdep install --from-paths src --ignore-src --rosdistro ${ROS_DISTRO} -y \
     && colcon build --symlink-install
+
+
+# Set environment variables
+ENV RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 
 # Set up the entrypoint
 COPY ./docker/entrypoint.sh /

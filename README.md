@@ -76,3 +76,7 @@ cd inspection_eoat
 docker compose build
 docker compose up lights camera
 ```
+
+### Debugging
+
+If you attempt to run the camera container and it fails, try disconnecting and reconnecting the camera USB cable as the device may still be in a state where it thinks it is connected. This can occur if a previously run instance of the container wasn't properly stopped.

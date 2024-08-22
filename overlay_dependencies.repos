@@ -4,12 +4,7 @@ repositories:
     gphoto2_cam:
         type: git
         url: https://github.com/cacton77/gphoto2_cam
-
-    # Inspection Interfaces
-    InspectionInterfaces:
-        type: git
-        url: https://github.com/macs-lab/InspectionInterfaces.git
-        version: main
+        version: f8ad7fb
 
     rpi_ws281x_ros:
         type: git
