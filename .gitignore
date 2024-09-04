@@ -1,1 +1,3 @@
-.vscode/
+/.vscode
+/gphoto2_cam
+/rpi_ws281x_ros

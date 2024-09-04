@@ -37,15 +37,21 @@ services:
       target: overlay
 
   # Dev container
-  dev:
-    extends: overlay
-    command: /bin/bash
+  devel:
+    extends: base
+    command: ros2 launch gphoto2_cam camera.launch.py
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: devel
     environment:
       - DISPLAY=${DISPLAY}
       - QT_X11_NO_MITSHM=1
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
       - /tmp/.docker.xauth:/tmp/.docker.xauth:rw
+      - ./gphoto2_cam:/overlay_ws/src/gphoto2_cam
+      - ./rpi_ws281x_ros:/overlay_ws/src/rpi_ws281x_ros
 
   # Test container
   camera:

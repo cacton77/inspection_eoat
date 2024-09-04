@@ -10,6 +10,9 @@ then
     source /base_ws/install/setup.bash
 fi
 
+cd /overlay_ws
+colcon build
+
 # Source the overlay workspace, if built
 if [ -f /overlay_ws/install/setup.bash ]
 then
