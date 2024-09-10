@@ -4,7 +4,7 @@ repositories:
     gphoto2_cam:
         type: git
         url: https://github.com/cacton77/gphoto2_cam
-        version: f8ad7fb
+        version: 851fb41
 
     rpi_ws281x_ros:
         type: git
