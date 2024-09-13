@@ -9,11 +9,8 @@ SHELL ["/bin/bash", "-c"]
 
 # Install cli tools via apt
 RUN apt-get update \
-    && apt-get install -y wget curl neovim python3-pip\
+    && apt-get install -y wget curl neovim python3-pip python3-rpi.gpio \
     && rm -rf /var/lib/apt/lists/*
-
-# Install rpi-ws281x-python package
-RUN pip install rpi_ws281x pydantic
 
 # Remove links to old gphoto2 version
 RUN rm -rf /lib/*-linux-gnu/libgphoto2*
@@ -37,6 +34,13 @@ RUN apt-get update \
 # Use Cyclone DDS as middleware
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-${ROS_DISTRO}-rmw-cyclonedds-cpp
+
+# Install python packages
+RUN apt-get update \
+    && apt-get install -y python3-pip python3-rpi.gpio \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pip install rpi_ws281x pydantic adafruit-blinka adafruit-circuitpython-neopixel-spi
 
 ARG DEBIAN_FRONTEND=dialog
 
