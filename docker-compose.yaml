@@ -55,7 +55,7 @@ services:
 
   # Test container
   camera:
-    extends: devel
+    extends: overlay
     command: ros2 launch gphoto2_cam camera.launch.py
     environment:
       - DISPLAY=${DISPLAY}
@@ -65,7 +65,7 @@ services:
       - /tmp/.docker.xauth:/tmp/.docker.xauth:rw
 
   lights:
-    extends: devel
+    extends: overlay
     command: ros2 launch rpi_ws281x_ros spi_strip.launch.py
     environment:
       - DISPLAY=${DISPLAY}
