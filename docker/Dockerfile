@@ -9,7 +9,7 @@ SHELL ["/bin/bash", "-c"]
 
 # Install cli tools via apt
 RUN apt-get update \
-    && apt-get install -y wget curl neovim python3-pip python3-rpi.gpio \
+    && apt-get install -y wget curl neovim \
     && rm -rf /var/lib/apt/lists/*
 
 # Remove links to old gphoto2 version
@@ -37,10 +37,18 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Install python packages
 RUN apt-get update \
-    && apt-get install -y python3-pip python3-rpi.gpio \
+    && apt-get install -y python3-pip \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip install rpi_ws281x pydantic adafruit-blinka adafruit-circuitpython-neopixel-spi
+RUN pip install pydantic 
+
+# Check for Raspberry Pi architecture and install specific packages
+RUN if [ "$(uname -m)" = "armv7l" ] || [ "$(uname -m)" = "aarch64" ]; then \
+    apt-get update \
+    && apt-get install -y python3-rpi.gpio \
+    && pip install rpi_ws281x adafruit-blinka adafruit-circuitpython-neopixel-spi \
+    && rm -rf /var/lib/apt/lists/*; \
+    fi
 
 ARG DEBIAN_FRONTEND=dialog
 
