@@ -39,7 +39,7 @@ services:
   # Dev container
   devel:
     extends: base
-    command: ros2 launch gphoto2_cam camera.launch.py
+    command: ros2 launch rpi_ws281x_ros spi_strip.launch.py
     build:
       context: .
       dockerfile: docker/Dockerfile
