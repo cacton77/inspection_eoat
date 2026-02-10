@@ -14,6 +14,14 @@ def generate_launch_description():
         executable="realsense2_camera_node",
         name="d405_camera",
         output="screen",
+            package="realsense2_camera",
+            executable="realsense2_camera_node",
+            name="d405_camera",
+            output="screen",
+            parameters=[{
+                'spatial_filter.enable': True,
+                'temporal_filter.enable': True,
+            }],
     )
 
     joy_node = Node(
@@ -35,8 +43,17 @@ def generate_launch_description():
         }]
     )
 
+    micro_ros_agent_node = Node(
+        package='micro_ros_agent',
+        executable='micro_ros_agent',
+        name='micro_ros_agent',
+        output='screen',
+        arguments=['udp4', '--port', '8888'],
+    )
+    
     return LaunchDescription(declared_arguments + [
         joy_node,
         d405_camera_node,
+        micro_ros_agent_node,
         stepper_light_controller_node
     ])
