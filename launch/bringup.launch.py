@@ -14,14 +14,10 @@ def generate_launch_description():
         executable="realsense2_camera_node",
         name="d405_camera",
         output="screen",
-            package="realsense2_camera",
-            executable="realsense2_camera_node",
-            name="d405_camera",
-            output="screen",
-            parameters=[{
-                'spatial_filter.enable': True,
-                'temporal_filter.enable': True,
-            }],
+        parameters=[{
+            'spatial_filter.enable': True,
+            'temporal_filter.enable': True,
+        }],
     )
 
     joy_node = Node(
