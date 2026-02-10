@@ -28,6 +28,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
+            'stepper_light_controller_node = inspection_eoat.stepper_light_controller_node:main',
         ],
     },
 )
