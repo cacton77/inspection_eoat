@@ -69,14 +69,14 @@
 #define R_SENSE            0.11f
 
 #define RUN_CURRENT_MA     600
-#define MICROSTEPS         8
-#define STALL_THRESHOLD    10
-#define HOMING_SPEED_US    800
+#define MICROSTEPS         2
+#define STALL_THRESHOLD    1
+#define HOMING_SPEED_US    4000
 #define MAX_POSSIBLE_STEPS 20000
 
-#define VEL_MIN_DELAY_US   2000
-#define VEL_MAX_DELAY_US   200
-#define POS_RUN_SPEED_US   400
+#define VEL_MIN_DELAY_US   4000
+#define VEL_MAX_DELAY_US   2000
+#define POS_RUN_SPEED_US   4000
 
 #define CMD_START          0xFF
 #define FB_START           0xFE
